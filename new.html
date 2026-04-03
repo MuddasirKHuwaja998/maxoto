@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M.A.X.Oto Otocostruzioni — Protesi Acustiche Digitali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  /* Deep grey palette — proper grey, not white */
+  --g00: #0c0c0f;
+  --g01: #131316;
+  --g02: #1b1b1f;
+  --g03: #232327;
+  --g04: #2d2d32;
+  --g05: #3c3c42;
+  --g06: #565660;
+  --g07: #787882;
+  --g08: #9898a2;
+  --g09: #b8b8c2;
+  --g10: #d0d0d8;
+  --g11: #e0e0e6;
+  --g12: #eaeaee;   /* section bg — visibly grey */
+  --g13: #f0f0f4;   /* lighter sections */
+  --g14: #f6f6f8;   /* card bg */
+
+  /* Gold */
+  --au:    #b8925a;
+  --au-lt: #ccaa72;
+  --au-dk: #8a6c3e;
+
+  /* Type */
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Outfit', system-ui, sans-serif;
+
+  /* Motion */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --nav-h: 68px;
+}
+
+/* ═══════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--sans); background: var(--g12); color: var(--g02); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { font-family: var(--sans); cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+/* ═══════════════════════════════════════════
+   PRELOADER
+═══════════════════════════════════════════ */
+#pre {
+  position: fixed; inset: 0; z-index: 9000;
+  background: var(--g00);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.75rem;
+  transition: opacity .7s var(--ease-io);
+}
+#pre.out { opacity: 0; pointer-events: none; }
+
+.pre-ring {
+  width: 56px; height: 56px;
+  border: 1px solid var(--g04);
+  border-top-color: var(--au);
+  border-radius: 50%;
+  animation: preRingSpin 1.4s linear infinite;
+}
+@keyframes preRingSpin { to { transform: rotate(360deg); } }
+
+.pre-logo {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 300; letter-spacing: .3em;
+  color: #fff; text-transform: uppercase;
+  opacity: 0; animation: fadeUp .8s .3s var(--ease) forwards;
+}
+.pre-sub {
+  font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--au); opacity: 0;
+  animation: fadeUp .7s .55s var(--ease) forwards;
+}
+.pre-bar-wrap {
+  width: clamp(140px, 30vw, 200px); height: 1px;
+  background: var(--g04); position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp .6s .7s var(--ease) forwards;
+}
+.pre-bar-fill {
+  position: absolute; inset: 0;
+  background: var(--au);
+  transform: translateX(-101%);
+  animation: barFill 1.8s .9s var(--ease) forwards;
+}
+@keyframes barFill { to { transform: translateX(0); } }
+.pre-pct {
+  font-size: .68rem; color: var(--g06); letter-spacing: .06em;
+  font-variant-numeric: tabular-nums;
+  opacity: 0; animation: fadeUp .5s .8s var(--ease) forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+#nav {
+  position: fixed; inset: 0 0 auto; z-index: 500;
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(1.25rem, 5vw, 4rem);
+  background: rgba(240,240,244,.94);
+  backdrop-filter: blur(20px) saturate(1.3);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--g11);
+  transition: box-shadow .4s;
+}
+#nav.scrolled { box-shadow: 0 2px 28px rgba(0,0,0,.07); }
+
+/* Logo */
+.nav-logo {
+  font-family: var(--serif); font-size: 1.15rem;
+  font-weight: 500; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--g02); display: flex; align-items: center; gap: .7rem;
+  user-select: none; flex-shrink: 0;
+}
+.nav-logo-emblem {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--au);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.nav-logo-emblem svg { width: 15px; height: 15px; }
+
+/* Links */
+.nav-links {
+  display: flex; gap: .25rem; align-items: center;
+}
+.nav-link {
+  font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 500; color: var(--g06);
+  padding: .45rem .85rem; border-radius: 4px;
+  transition: color .22s, background .22s;
+  position: relative;
+}
+.nav-link:hover {
+  color: var(--g02);
+  background: rgba(0,0,0,.055);
+}
+.nav-link.active {
+  color: var(--g02);
+  background: rgba(0,0,0,.07);
+}
+/* Gold underline on active */
+.nav-link.active::after {
+  content: ''; position: absolute;
+  bottom: 6px; left: .85rem; right: .85rem;
+  height: 1px; background: var(--au);
+}
+
+/* Dropdown */
+.nav-drop-wrap { position: relative; }
+.nav-drop-btn {
+  font-size: .65rem; letter-spacing: .12em; text-transform: uppercase;
+  font-weight: 500; color: var(--g06);
+  padding: .45rem .85rem; border-radius: 4px;
+  background: none; border: none;
+  transition: color .22s, background .22s;
+  display: flex; align-items: center; gap: .4rem;
+  cursor: pointer;
+}
+.nav-drop-btn:hover { color: var(--g02); background: rgba(0,0,0,.055); }
+.nav-drop-btn svg {
+  width: 9px; height: 9px;
+  transition: transform .3s var(--ease);
+}
+.nav-drop-wrap:hover .nav-drop-btn svg { transform: rotate(180deg); }
+
+.nav-dropdown {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: #fff; border: 1px solid var(--g11);
+  box-shadow: 0 20px 50px rgba(0,0,0,.1);
+  min-width: 230px; padding: .5rem 0;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity .28s var(--ease), transform .28s var(--ease), visibility .28s;
+}
+.nav-drop-wrap:hover .nav-dropdown {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-drop-label {
+  font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--au); padding: .6rem 1.2rem .2rem;
+}
+.nav-drop-item {
+  display: flex; align-items: center; gap: .85rem;
+  padding: .7rem 1.2rem; color: var(--g05); font-size: .78rem;
+  transition: background .18s, color .18s;
+}
+.nav-drop-item:hover { background: var(--g12); color: var(--g02); }
+.nav-drop-ico {
+  width: 30px; height: 30px; border: 1px solid var(--g11);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.nav-drop-ico svg { width: 14px; height: 14px; stroke: var(--au); fill: none; stroke-width: 1.4; stroke-linecap: round; }
+.nav-drop-info-name { font-size: .75rem; font-weight: 500; color: var(--g02); }
+.nav-drop-info-sub { font-size: .62rem; color: var(--g07); margin-top: 1px; }
+.nav-drop-divider { height: 1px; background: var(--g11); margin: .3rem 0; }
+
+/* CTA button */
+.nav-cta {
+  font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 500; padding: .65rem 1.5rem;
+  border: 1px solid var(--g03); background: none; color: var(--g02);
+  transition: background .25s, color .25s, transform .2s;
+}
+.nav-cta:hover { background: var(--g02); color: #fff; transform: translateY(-1px); }
+
+/* Ham */
+.nav-ham {
+  display: none; flex-direction: column; gap: 5px;
+  padding: 6px; background: none; border: none; cursor: pointer;
+}
+.nav-ham span {
+  display: block; width: 22px; height: 1px;
+  background: var(--g02); transition: all .32s var(--ease);
+}
+.nav-ham.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.nav-ham.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.nav-ham.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* Mobile nav */
+.mob-nav {
+  position: fixed; inset: var(--nav-h) 0 0;
+  background: var(--g01); z-index: 490;
+  display: flex; flex-direction: column; justify-content: center;
+  align-items: center; gap: 2.2rem;
+  transform: translateX(100%);
+  transition: transform .45s var(--ease);
+}
+.mob-nav.open { transform: none; }
+.mob-nav a {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 7vw, 2.8rem);
+  font-weight: 300; color: #fff; letter-spacing: .04em;
+  transition: color .2s;
+}
+.mob-nav a:hover { color: var(--au); }
+.mob-nav .mob-soon {
+  font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--g05); display: block; text-align: center; margin-top: .2rem;
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+[data-r] {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .75s var(--ease), transform .75s var(--ease);
+}
+[data-r="l"] { transform: translateX(-30px); }
+[data-r="r"] { transform: translateX(30px); }
+[data-r].on  { opacity: 1; transform: none; }
+[data-d="1"] { transition-delay: .1s; }
+[data-d="2"] { transition-delay: .2s; }
+[data-d="3"] { transition-delay: .3s; }
+[data-d="4"] { transition-delay: .4s; }
+[data-d="5"] { transition-delay: .5s; }
+
+/* ═══════════════════════════════════════════
+   SHARED
+═══════════════════════════════════════════ */
+.sec    { padding: clamp(4rem,9vw,7.5rem) clamp(1.25rem,6vw,5rem); }
+.sec-sm { padding: clamp(3rem,6vw,5rem)   clamp(1.25rem,6vw,5rem); }
+.sec-dk { background: var(--g01); }
+.sec-md { background: var(--g13); }
+.sec-gr { background: var(--g12); }
+
+.eyebrow {
+  font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--au); display: flex; align-items: center; gap: .75rem;
+  margin-bottom: .9rem;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--au); }
+
+.h-serif {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 4.2vw, 3.6rem);
+  font-weight: 300; line-height: 1.1; color: var(--g02);
+}
+.h-serif em { font-style: italic; color: var(--au); }
+.h-serif-xl {
+  font-family: var(--serif);
+  font-size: clamp(2.6rem, 5.5vw, 5rem);
+  font-weight: 300; line-height: 1.04;
+}
+.h-lt  { color: #fff; }
+.h-lt em { color: var(--au-lt); }
+
+.body-tx { font-size: clamp(.82rem,1.2vw,.92rem); line-height: 1.88; color: var(--g06); font-weight: 300; }
+.body-dk { color: var(--g08); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+  font-weight: 500; padding: .85rem 1.9rem;
+  transition: all .28s var(--ease); border: none;
+}
+.btn svg { width: 13px; height: 13px; flex-shrink: 0; transition: transform .28s var(--ease); }
+.btn:hover svg { transform: translateX(3px); }
+.btn-au   { background: var(--au); color: #fff; }
+.btn-au:hover { background: var(--au-lt); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(184,146,90,.3); }
+.btn-dk   { background: none; color: var(--g02); border: 1px solid var(--g03); }
+.btn-dk:hover { background: var(--g02); color: #fff; }
+.btn-lt   { background: none; color: #fff; border: 1px solid rgba(255,255,255,.28); }
+.btn-lt:hover { border-color: #fff; background: rgba(255,255,255,.09); }
+
+.rule-au  { width: 32px; height: 1px; background: var(--au); margin: 1.4rem 0; }
+.divider  { height: 1px; background: var(--g11); }
+.divider-dk { height: 1px; background: var(--g04); }
+
+/* Stat */
+.stat-n { font-family: var(--serif); font-size: clamp(2.2rem,4.5vw,3.6rem); font-weight: 300; color: var(--au); line-height: 1; }
+.stat-l { font-size: .65rem; letter-spacing: .12em; text-transform: uppercase; color: var(--g07); margin-top: .35rem; }
+
+/* ═══════════════════════════════════════════
+   MARQUEE
+═══════════════════════════════════════════ */
+.mq { background: var(--g02); overflow: hidden; padding: .85rem 0; border-top: 1px solid var(--g04); border-bottom: 1px solid var(--g04); }
+.mq-track { display: flex; width: max-content; animation: mqRoll 32s linear infinite; }
+.mq-track:hover { animation-play-state: paused; }
+.mq-item { white-space: nowrap; padding: 0 2.8rem; font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: #c4c4d0; font-weight: 300; }
+.mq-dot  { color: var(--au); font-size: .9rem; align-self: center; }
+@keyframes mqRoll { to { transform: translateX(-50%); } }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: calc(100svh - var(--nav-h));
+  overflow: hidden;
+}
+
+/* Left — dark with grid texture */
+.hero-l {
+  background: var(--g01);
+  padding: clamp(3rem,8vw,7rem) clamp(2rem,5.5vw,5rem);
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.hero-l::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--g03) 1px, transparent 1px),
+    linear-gradient(90deg, var(--g03) 1px, transparent 1px);
+  background-size: 50px 50px; opacity: .4;
+}
+.hero-l::after {
+  content: ''; position: absolute; right: 0; top: 10%; bottom: 10%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--au) 40%, var(--au) 60%, transparent);
+}
+.hero-l > * { position: relative; z-index: 1; }
+
+.hero-eye {
+  font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--au); display: flex; align-items: center; gap: 14px;
+  margin-bottom: 2.5rem;
+}
+.hero-eye::before { content: ''; width: 32px; height: 1px; background: var(--au); }
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5.5vw, 5rem);
+  font-weight: 300; line-height: 1.05;
+  color: #fff; margin-bottom: 1.5rem;
+}
+.hero-h1 em { font-style: italic; color: var(--au-lt); }
+
+.hero-desc {
+  font-size: clamp(.82rem,1.15vw,.92rem);
+  line-height: 1.9; color: var(--g08);
+  font-weight: 300; max-width: 430px; margin-bottom: 1.25rem;
+}
+
+/* Price highlight pill */
+.hero-price {
+  display: inline-flex; align-items: center; gap: .75rem;
+  border: 1px solid var(--au-dk); padding: .6rem 1.1rem;
+  margin-bottom: 2.5rem; width: fit-content;
+}
+.hero-price-val {
+  font-family: var(--serif); font-size: 1.5rem; font-weight: 300; color: var(--au);
+}
+.hero-price-lbl { font-size: .62rem; color: var(--g07); font-weight: 300; line-height: 1.4; }
+
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* Right — visual */
+.hero-r {
+  background: var(--g13);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3rem; padding: 3rem;
+  position: relative; overflow: hidden;
+}
+.hero-r::before {
+  content: 'M.A.X.Oto';
+  position: absolute; font-family: var(--serif);
+  font-size: clamp(80px,14vw,160px);
+  font-weight: 300; color: rgba(0,0,0,.04);
+  letter-spacing: .08em; white-space: nowrap;
+  pointer-events: none; user-select: none;
+}
+
+/* ── ORBIT VISUAL ── */
+.orb-wrap {
+  position: relative;
+  width: clamp(220px, 28vw, 300px);
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Three concentric rings */
+.orb-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid var(--g10);
+}
+.orb-ring-1 { inset: 0;   animation: orbPulse 4s ease-in-out infinite; }
+.orb-ring-2 { inset: 14%; animation: orbPulse 4s .7s ease-in-out infinite; }
+.orb-ring-3 { inset: 28%; animation: orbPulse 4s 1.4s ease-in-out infinite; }
+@keyframes orbPulse {
+  0%,100% { opacity: .5; }
+  50%      { opacity: 1; }
+}
+
+/* Core */
+.orb-core {
+  width: clamp(64px,8.5vw,86px); aspect-ratio: 1;
+  border-radius: 50%; background: var(--g01);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  z-index: 2; box-shadow: 0 16px 50px rgba(0,0,0,.18);
+  flex-shrink: 0;
+}
+.orb-core svg  { width: clamp(22px,3vw,28px); height: auto; }
+.orb-core-lbl  { font-size: .46rem; letter-spacing: .14em; text-transform: uppercase; color: var(--g06); }
+
+/*
+   ORBIT DOTS — each dot is an absolutely positioned element
+   at the center of .orb-wrap.  A CSS animation rotates the
+   coordinate system, then translateX pushes it out to the
+   exact ring radius. A counter-rotation keeps the dot round.
+
+   Ring radii (as % of half the container width = 50%):
+     outer → 50%   (sits on outer ring border)
+     mid   → 36%   (sits on middle ring border, inset:14% → r=43%)
+     inner → 22%   (sits on inner ring border,  inset:28% → r=36%)
+*/
+.orb-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--au);
+  /* offset so the dot center aligns at (0,0) of its transform */
+  margin: -3.5px 0 0 -3.5px;
+  z-index: 3;
+}
+.orb-dot-1 { animation: spinOrb1  7s linear infinite; }
+.orb-dot-2 { animation: spinOrb2 11s linear infinite reverse; }
+.orb-dot-3 { animation: spinOrb3  5s linear infinite; }
+
+/* push = radius * container-half-width. Container = clamp(220,28vw,300).
+   Use unitless multiples of 50% (= half the square side).
+   outer ring  →  50% of half = 50%  of self (just use translateX with var)
+   We cheat by using a CSS var trick: the keyframe sets rotate then translateX */
+@keyframes spinOrb1 {
+  from { transform: rotate(0deg)   translateX(calc(50% * var(--orb-sz, 1) * 0.995)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(calc(50% * var(--orb-sz, 1) * 0.995)) rotate(-360deg); }
+}
+@keyframes spinOrb2 {
+  from { transform: rotate(120deg)   translateX(calc(50% * var(--orb-sz, 1) * 0.72))  rotate(-120deg); }
+  to   { transform: rotate(480deg)   translateX(calc(50% * var(--orb-sz, 1) * 0.72))  rotate(-480deg); }
+}
+@keyframes spinOrb3 {
+  from { transform: rotate(240deg)   translateX(calc(50% * var(--orb-sz, 1) * 0.44))  rotate(-240deg); }
+  to   { transform: rotate(600deg)   translateX(calc(50% * var(--orb-sz, 1) * 0.44))  rotate(-600deg); }
+}
+
+/* The trick: each orb-wrap has a known size. We need px-based translateX.
+   Inject the px value via JS for precise ring-snapping.  CSS fallback above
+   gives a close approximation. */
+
+/* Hero stats */
+.hero-stats { display: flex; gap: 2.5rem; }
+.h-stat-n { font-family: var(--serif); font-size: 2.2rem; font-weight: 300; color: var(--g02); line-height: 1; }
+.h-stat-l { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--g06); margin-top: .3rem; }
+
+/* ═══════════════════════════════════════════
+   OFFERINGS STRIP — 3 key props
+═══════════════════════════════════════════ */
+.offers-strip {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--g10);
+  border-top: 1px solid var(--g10);
+  border-bottom: 1px solid var(--g10);
+}
+.offer-item {
+  background: var(--g14);
+  padding: 2rem 1.75rem;
+  display: flex; gap: 1.1rem; align-items: flex-start;
+  transition: background .3s;
+}
+.offer-item:hover { background: #fff; }
+.offer-ico {
+  width: 42px; height: 42px; flex-shrink: 0;
+  border: 1px solid var(--g11);
+  display: flex; align-items: center; justify-content: center;
+}
+.offer-ico svg { width: 19px; height: 19px; stroke: var(--au); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.offer-title { font-size: .82rem; font-weight: 500; color: var(--g02); margin-bottom: .3rem; }
+.offer-desc  { font-size: .74rem; color: var(--g07); line-height: 1.65; font-weight: 300; }
+
+/* ═══════════════════════════════════════════
+   SERVICES GRID
+═══════════════════════════════════════════ */
+.svc-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--g10);
+  border: 1px solid var(--g10); margin-top: 3.5rem;
+}
+.svc-card {
+  background: var(--g13); padding: 2.2rem 1.9rem;
+  position: relative; overflow: hidden;
+  transition: background .38s var(--ease);
+}
+.svc-card::after {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 2px;
+  background: var(--au);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .38s var(--ease);
+}
+.svc-card:hover { background: var(--g02); }
+.svc-card:hover::after { transform: scaleX(1); }
+.svc-card:hover .sc-n  { color: var(--au); }
+.svc-card:hover .sc-ti { color: #fff; }
+.svc-card:hover .sc-tx { color: var(--g08); }
+.svc-card:hover .sc-ico { border-color: var(--g05); }
+.svc-card:hover .sc-ico svg { stroke: var(--au); }
+.sc-ico { width: 44px; height: 44px; border: 1px solid var(--g11); display: flex; align-items: center; justify-content: center; margin-bottom: 1.4rem; transition: border-color .38s; }
+.sc-ico svg { width: 19px; height: 19px; stroke: var(--g07); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: stroke .38s; }
+.sc-n  { font-family: var(--serif); font-size: .68rem; color: var(--au); margin-bottom: .9rem; letter-spacing: .06em; transition: color .38s; }
+.sc-ti { font-size: .85rem; font-weight: 500; color: var(--g02); margin-bottom: .45rem; transition: color .38s; }
+.sc-tx { font-size: .74rem; line-height: 1.75; color: var(--g06); font-weight: 300; transition: color .38s; }
+
+/* ═══════════════════════════════════════════
+   WHY STRIP (split)
+═══════════════════════════════════════════ */
+.why-strip {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 480px;
+}
+.why-l {
+  background: var(--g01);
+  padding: clamp(3rem,7vw,5.5rem) clamp(2rem,5.5vw,5rem);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.why-r {
+  background: var(--g02);
+  padding: clamp(2.5rem,5vw,4rem);
+  display: flex; flex-direction: column; justify-content: center; gap: 1.1rem;
+}
+/* Metric rows */
+.metric {
+  padding: 1.2rem 1.4rem;
+  background: var(--g03); border-left: 2px solid var(--au);
+  display: flex; flex-direction: column; gap: .6rem;
+}
+.metric-top {
+  display: flex; align-items: baseline;
+  justify-content: space-between;
+}
+.metric-val { font-family: var(--serif); font-size: 1.9rem; font-weight: 300; color: #fff; line-height: 1; }
+.metric-lbl { font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--g08); }
+.metric-bar { height: 2px; background: var(--g05); position: relative; overflow: hidden; }
+.metric-fill { position: absolute; inset: 0 auto 0 0; background: var(--au); width: 0; transition: width 1.4s .3s var(--ease); }
+
+/* ═══════════════════════════════════════════
+   PRODUCTS SECTION
+═══════════════════════════════════════════ */
+.prod-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 2px; background: var(--g04); margin-top: 3.5rem;
+}
+.prod-card {
+  background: var(--g01); padding: clamp(2rem,4vw,3.5rem);
+  position: relative; overflow: hidden;
+  transition: background .3s;
+}
+.prod-card:hover { background: var(--g02); }
+.prod-card::before {
+  content: ''; position: absolute;
+  bottom: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, var(--au), transparent);
+}
+.prod-ghost {
+  position: absolute; bottom: .8rem; right: 1.5rem;
+  font-family: var(--serif); font-size: 7rem;
+  font-weight: 300; color: rgba(255,255,255,.035);
+  line-height: 1; user-select: none; pointer-events: none;
+}
+.prod-tag  { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--au); margin-bottom: 1.4rem; }
+.prod-name { font-family: var(--serif); font-size: clamp(1.6rem,3.2vw,2.8rem); font-weight: 300; color: #fff; margin-bottom: .85rem; }
+.prod-badges { display: flex; gap: .45rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.prod-badge { font-size: .55rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .85rem; border: 1px solid var(--g05); color: var(--g08); }
+.prod-tl { font-family: var(--serif); font-size: 1rem; font-style: italic; color: var(--g07); margin-bottom: 1.5rem; }
+.prod-feats { margin-bottom: 2rem; display: flex; flex-direction: column; gap: .4rem; }
+.prod-feat { font-size: .72rem; color: var(--g08); font-weight: 300; display: flex; align-items: center; gap: .55rem; }
+.prod-feat::before { content: ''; width: 12px; height: 1px; background: var(--au); flex-shrink: 0; }
+.prod-price-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.75rem; }
+.prod-price { font-family: var(--serif); font-size: 1.6rem; font-weight: 300; color: var(--au); }
+.prod-price-note { font-size: .65rem; color: var(--g07); font-weight: 300; line-height: 1.4; }
+.prod-link {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .62rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--au); transition: gap .28s var(--ease);
+}
+.prod-link:hover { gap: .85rem; }
+.prod-link svg { width: 12px; height: 12px; }
+
+/* ═══════════════════════════════════════════
+   INCLUDED / PACKAGE SECTION
+═══════════════════════════════════════════ */
+.pkg-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1.5rem; margin-top: 3.5rem;
+}
+.pkg-card {
+  background: #fff; padding: 2rem 1.75rem;
+  border: 1px solid var(--g11);
+  transition: box-shadow .3s, transform .3s var(--ease);
+}
+.pkg-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,.07); transform: translateY(-4px); }
+.pkg-ico { width: 44px; height: 44px; border: 1px solid var(--g11); display: flex; align-items: center; justify-content: center; margin-bottom: 1.3rem; }
+.pkg-ico svg { width: 20px; height: 20px; stroke: var(--au); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.pkg-title { font-size: .82rem; font-weight: 500; color: var(--g02); margin-bottom: .4rem; }
+.pkg-text  { font-size: .73rem; color: var(--g07); line-height: 1.72; font-weight: 300; }
+
+/* ═══════════════════════════════════════════
+   AFFILIATES STRIP
+═══════════════════════════════════════════ */
+.aff-strip {
+  background: var(--g03);
+  padding: clamp(3rem,6vw,5rem) clamp(1.25rem,6vw,5rem);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3rem; align-items: center;
+}
+.aff-badge-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.aff-badge {
+  font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .35rem 1rem; border: 1px solid var(--g05); color: var(--g07);
+}
+.aff-list { display: flex; flex-direction: column; gap: .85rem; }
+.aff-item {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 1rem 1.2rem; background: var(--g04);
+  border-left: 2px solid var(--au);
+}
+.aff-item-ico { width: 34px; height: 34px; border: 1px solid var(--g05); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.aff-item-ico svg { width: 16px; height: 16px; stroke: var(--au); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.aff-item-title { font-size: .78rem; font-weight: 500; color: #fff; margin-bottom: .2rem; }
+.aff-item-text  { font-size: .7rem; color: var(--g07); font-weight: 300; }
+
+/* ═══════════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════════ */
+.testi-grid {
+  display: grid; grid-template-columns: repeat(2,1fr);
+  gap: 1.2rem; margin-top: 3.5rem;
+}
+.testi-card {
+  background: #fff; padding: 2rem;
+  border: 1px solid var(--g11);
+  transition: box-shadow .3s, transform .3s var(--ease);
+}
+.testi-card:hover { box-shadow: 0 14px 44px rgba(0,0,0,.07); transform: translateY(-4px); }
+.testi-stars { display: flex; gap: 3px; margin-bottom: 1.1rem; }
+.testi-star  { width: 11px; height: 11px; fill: var(--au); }
+.testi-q {
+  font-family: var(--serif); font-size: .96rem; font-style: italic;
+  font-weight: 300; color: var(--g04); line-height: 1.65;
+  margin-bottom: 1.6rem; padding-left: 1rem; position: relative;
+}
+.testi-q::before {
+  content: '\201C'; position: absolute; left: 0; top: -4px;
+  font-size: 1.6rem; color: var(--au); line-height: 1;
+}
+.testi-auth { display: flex; align-items: center; gap: .8rem; border-top: 1px solid var(--g11); padding-top: 1.2rem; }
+.testi-av {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--g12); border: 1px solid var(--g10);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 500; color: var(--g06); flex-shrink: 0;
+}
+.testi-name { font-size: .78rem; font-weight: 500; color: var(--g02); }
+.testi-role { font-size: .65rem; color: var(--g07); font-weight: 300; margin-top: 1px; }
+
+/* ═══════════════════════════════════════════
+   CTA BANNER
+═══════════════════════════════════════════ */
+.cta-wrap {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 2.5rem; flex-wrap: wrap;
+}
+.cta-txt { flex: 1; min-width: 240px; }
+.cta-acts { display: flex; flex-direction: column; gap: .75rem; flex-shrink: 0; min-width: 210px; }
+
+/* ═══════════════════════════════════════════
+   CONTACTS STRIP
+═══════════════════════════════════════════ */
+.contacts-strip {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--g04);
+}
+.contact-item {
+  background: var(--g02); padding: 2.25rem 2rem;
+  display: flex; gap: 1.1rem; align-items: flex-start;
+  transition: background .3s;
+}
+.contact-item:hover { background: var(--g03); }
+.contact-ico { width: 40px; height: 40px; border: 1px solid var(--g05); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.contact-ico svg { width: 17px; height: 17px; stroke: var(--au); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.contact-lbl { font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--g07); margin-bottom: .35rem; }
+.contact-val { font-size: .82rem; color: #fff; font-weight: 300; line-height: 1.55; }
+.contact-val a { color: #fff; transition: color .2s; }
+.contact-val a:hover { color: var(--au); }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--g00);
+  border-top: 1px solid var(--g03);
+  padding: clamp(3rem,7vw,5.5rem) clamp(1.25rem,6vw,5rem) 2rem;
+}
+.ft-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: clamp(2rem,4.5vw,4rem); margin-bottom: 3.5rem;
+}
+.ft-brand-name {
+  font-family: var(--serif); font-size: 1.2rem;
+  font-weight: 300; letter-spacing: .2em;
+  text-transform: uppercase; color: #fff; margin-bottom: .75rem;
+}
+.ft-brand-desc {
+  font-size: .74rem; line-height: 1.85; color: var(--g06);
+  font-weight: 300; max-width: 260px; margin-bottom: 1.6rem;
+}
+.ft-cert-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+.ft-cert {
+  font-size: .55rem; letter-spacing: .1em; text-transform: uppercase;
+  padding: .3rem .85rem; border: 1px solid var(--g04); color: var(--g06);
+}
+.ft-social { display: flex; gap: .5rem; margin-top: 1.2rem; }
+.ft-soc {
+  width: 32px; height: 32px; border: 1px solid var(--g04);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .22s, background .22s;
+}
+.ft-soc:hover { border-color: var(--au); background: var(--g03); }
+.ft-soc svg { width: 13px; height: 13px; stroke: var(--g06); fill: none; stroke-width: 1.5; stroke-linecap: round; transition: stroke .22s; }
+.ft-soc:hover svg { stroke: var(--au); }
+.ft-col-title {
+  font-size: .56rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--au); margin-bottom: 1.2rem;
+}
+.ft-links { display: flex; flex-direction: column; gap: .6rem; }
+.ft-links a { font-size: .74rem; color: var(--g06); font-weight: 300; transition: color .22s; }
+.ft-links a:hover { color: var(--g10); }
+.ft-contact-row { font-size: .74rem; color: var(--g06); font-weight: 300; line-height: 1.6; margin-bottom: .55rem; }
+.ft-contact-row a { color: var(--g06); transition: color .2s; }
+.ft-contact-row a:hover { color: var(--au); }
+.ft-bottom {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  border-top: 1px solid var(--g03); padding-top: 1.6rem;
+}
+.ft-copy { font-size: .67rem; color: var(--g05); font-weight: 300; }
+.ft-legal { display: flex; gap: 1.4rem; flex-wrap: wrap; }
+.ft-legal a { font-size: .65rem; color: var(--g05); transition: color .2s; font-weight: 300; }
+.ft-legal a:hover { color: var(--g09); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1100px) {
+  .svc-grid   { grid-template-columns: repeat(2,1fr); }
+  .pkg-grid   { grid-template-columns: repeat(2,1fr); }
+  .ft-grid    { grid-template-columns: 1fr 1fr; }
+  .offers-strip { grid-template-columns: 1fr 1fr; }
+  .contacts-strip { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width:900px) {
+  .hero       { grid-template-columns: 1fr; }
+  .hero-r     { display: none; }
+  .hero-l::after { display: none; }
+  .why-strip  { grid-template-columns: 1fr; }
+  .prod-grid  { grid-template-columns: 1fr; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .cta-wrap   { flex-direction: column; align-items: flex-start; }
+  .aff-strip  { grid-template-columns: 1fr; }
+  .nav-ham    { display: flex; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-drop-wrap { display: none; }
+}
+@media(max-width:600px) {
+  :root { --nav-h: 60px; }
+  .svc-grid, .pkg-grid, .offers-strip, .contacts-strip { grid-template-columns: 1fr; }
+  .ft-grid    { grid-template-columns: 1fr; }
+  .ft-bottom  { flex-direction: column; align-items: flex-start; }
+  .ft-legal   { flex-direction: column; gap: .4rem; }
+  .hero-stats { gap: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PRELOADER ══════════════════════════════ -->
+<div id="pre" aria-hidden="true">
+  <div class="pre-ring"></div>
+  <p class="pre-logo">M.A.X.Oto</p>
+  <p class="pre-sub">Otocostruzioni · Protesi Acustiche Digitali</p>
+  <div class="pre-bar-wrap"><div class="pre-bar-fill"></div></div>
+  <p class="pre-pct" id="prePct">0%</p>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Navigazione principale">
+
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-emblem">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--au)" stroke-width="1.5" stroke-linecap="round">
+        <circle cx="12" cy="12" r="9"/>
+        <circle cx="12" cy="12" r="4"/>
+        <line x1="12" y1="3"  x2="12" y2="5"/>
+        <line x1="12" y1="19" x2="12" y2="21"/>
+        <line x1="3"  y1="12" x2="5"  y2="12"/>
+        <line x1="19" y1="12" x2="21" y2="12"/>
+      </svg>
+    </div>
+    M.A.X.Oto
+  </a>
+
+  <ul class="nav-links" role="list">
+    <li><a class="nav-link active" href="#">Home</a></li>
+    <li><a class="nav-link" href="#Chi siamo">Chi siamo</a></li>
+
+    <!-- Prodotti e Servizi dropdown -->
+    <li class="nav-drop-wrap">
+      <button class="nav-drop-btn" aria-haspopup="true" aria-expanded="false">
+        Prodotti e Servizi
+        <svg viewBox="0 0 10 7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l4 5 4-5"/></svg>
+      </button>
+      <div class="nav-dropdown" role="menu">
+        <p class="nav-drop-label">Le Nostre Soluzioni</p>
+        <a class="nav-drop-item" href="#products" role="menuitem">
+          <div class="nav-drop-ico">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>
+          </div>
+          <div>
+            <div class="nav-drop-info-name">Apparecchi Acustici</div>
+            <div class="nav-drop-info-sub">ENDO · CIC · Retro Micro One</div>
+          </div>
+        </a>
+        <div class="nav-drop-divider"></div>
+        <a class="nav-drop-item" href="#products" role="menuitem">
+          <div class="nav-drop-ico">
+            <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+          </div>
+          <div>
+            <div class="nav-drop-info-name">Amplificatori Acustici</div>
+            <div class="nav-drop-info-sub">Amplificazione personalizzata</div>
+          </div>
+        </a>
+      </div>
+    </li>
+
+    <li><a class="nav-link" href="#affiliates">Affiliati</a></li>
+    <li><a class="nav-link" href="#contacts">Contatti</a></li>
+  </ul>
+
+  <button class="nav-cta" onclick="document.getElementById('contacts').scrollIntoView({behavior:'smooth'})">
+    Test Gratuito
+  </button>
+
+  <button class="nav-ham" id="navHam" onclick="toggleMob()" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav -->
+<div class="mob-nav" id="mobNav">
+  <a href="#">Home</a>
+  <a href="#Chi siamo" onclick="toggleMob()">Chi siamo</a>
+  <a href="#products" onclick="toggleMob()">
+    Prodotti e Servizi
+    <span class="mob-soon">Apparecchi &amp; Amplificatori</span>
+  </a>
+  <a href="#affiliates" onclick="toggleMob()">Affiliati</a>
+  <a href="#contacts" onclick="toggleMob()">Contatti</a>
+</div>
+
+<!-- ══ HERO ════════════════════════════════════ -->
+<section class="hero" style="margin-top:var(--nav-h);">
+  <div class="hero-l">
+    <div class="hero-eye">Produttore Diretto · Napoli Italia</div>
+
+    <h1 class="hero-h1">
+      Dal produttore<br>al paziente,<br><em>senza intermediari.</em>
+    </h1>
+
+    <p class="hero-desc">
+      M.A.X.Oto Otocostruzioni realizza protesi acustiche digitali microtimpaniche di altissima qualità. Le vendiamo direttamente al consumatore — eliminando rivenditori e costi di gestione — per renderle accessibili a tutti.
+    </p>
+
+    <div class="hero-price">
+      <div class="hero-price-val">€ 950</div>
+      <div class="hero-price-lbl">
+        + 4% IVA per protesi<br>
+        <span style="color:var(--au);font-size:.6rem;">Marcatura CE0051 · Garanzia 2 anni inclusa</span>
+      </div>
+    </div>
+
+    <div class="hero-btns">
+      <a href="#contacts" class="btn btn-au">
+        Test Gratuito dell'Udito
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a href="#products" class="btn btn-lt">
+        Scopri i Prodotti
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-r">
+    <!-- Orbit visual -->
+    <div class="orb-wrap" id="orbWrap">
+      <div class="orb-ring orb-ring-1"></div>
+      <div class="orb-ring orb-ring-2"></div>
+      <div class="orb-ring orb-ring-3"></div>
+      <div class="orb-core">
+        <svg viewBox="0 0 40 40" fill="none" stroke="var(--au)" stroke-width="1.2" stroke-linecap="round">
+          <circle cx="20" cy="20" r="16"/>
+          <path d="M12 20c0-4.42 3.58-8 8-8s8 3.58 8 8"/>
+          <circle cx="20" cy="20" r="3" fill="var(--au)" stroke="none"/>
+        </svg>
+        <span class="orb-core-lbl">M.A.X.Oto</span>
+      </div>
+      <!-- Orbit dots anchored at center — JS will set precise px -->
+      <div class="orb-dot orb-dot-1" id="od1"></div>
+      <div class="orb-dot orb-dot-2" id="od2"></div>
+      <div class="orb-dot orb-dot-3" id="od3"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="hero-stats">
+      <div>
+        <div class="h-stat-n">9M+</div>
+        <div class="h-stat-l">Italiani con Ipoacusia</div>
+      </div>
+      <div>
+        <div class="h-stat-n">30%</div>
+        <div class="h-stat-l">della Popolazione</div>
+      </div>
+      <div>
+        <div class="h-stat-n">CE</div>
+        <div class="h-stat-l">Certificazione 0051</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ═════════════════════════════════ -->
+<div class="mq" aria-hidden="true">
+  <div class="mq-track">
+    <span class="mq-item">Apparecchi Acustici Digitali</span><span class="mq-dot">·</span>
+    <span class="mq-item">Amplificatori Acustici</span><span class="mq-dot">·</span>
+    <span class="mq-item">Protesi Endoauricolari ENDO</span><span class="mq-dot">·</span>
+    <span class="mq-item">CIC · Completamente in Canale</span><span class="mq-dot">·</span>
+    <span class="mq-item">Retro Micro One</span><span class="mq-dot">·</span>
+    <span class="mq-item">Test Gratuito dell'Udito</span><span class="mq-dot">·</span>
+    <span class="mq-item">Garanzia 2 Anni</span><span class="mq-dot">·</span>
+    <span class="mq-item">Assistenza Domiciliare GRATUITA</span><span class="mq-dot">·</span>
+    <span class="mq-item">Marcatura CE 0051</span><span class="mq-dot">·</span>
+    <span class="mq-item">Dal Produttore al Consumatore</span><span class="mq-dot">·</span>
+    <!-- repeat for seamless loop -->
+    <span class="mq-item">Apparecchi Acustici Digitali</span><span class="mq-dot">·</span>
+    <span class="mq-item">Amplificatori Acustici</span><span class="mq-dot">·</span>
+    <span class="mq-item">Protesi Endoauricolari ENDO</span><span class="mq-dot">·</span>
+    <span class="mq-item">CIC · Completamente in Canale</span><span class="mq-dot">·</span>
+    <span class="mq-item">Retro Micro One</span><span class="mq-dot">·</span>
+    <span class="mq-item">Test Gratuito dell'Udito</span><span class="mq-dot">·</span>
+    <span class="mq-item">Garanzia 2 Anni</span><span class="mq-dot">·</span>
+    <span class="mq-item">Assistenza Domiciliare GRATUITA</span><span class="mq-dot">·</span>
+    <span class="mq-item">Marcatura CE 0051</span><span class="mq-dot">·</span>
+    <span class="mq-item">Dal Produttore al Consumatore</span><span class="mq-dot">·</span>
+  </div>
+</div>
+
+<!-- ══ 3 KEY OFFERINGS ═════════════════════════ -->
+<div class="offers-strip">
+  <div class="offer-item">
+    <div class="offer-ico">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+    </div>
+    <div>
+      <div class="offer-title">Test Gratuito dell'Udito</div>
+      <div class="offer-desc">Audiometria professionale senza costi, effettuata da audioprotesisti qualificati a domicilio o in sede.</div>
+    </div>
+  </div>
+  <div class="offer-item">
+    <div class="offer-ico">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>
+    </div>
+    <div>
+      <div class="offer-title">Apparecchi Acustici Digitali</div>
+      <div class="offer-desc">Protesi microtimpaniche digitali marcate CE, vendute direttamente dal costruttore. Invisibili, potenti, a € 950.</div>
+    </div>
+  </div>
+  <div class="offer-item">
+    <div class="offer-ico">
+      <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+    </div>
+    <div>
+      <div class="offer-title">Amplificatori Acustici</div>
+      <div class="offer-desc">Amplificazione sonora personalizzata ad alta fedeltà per chi necessita di supporto uditivo senza protesi completa.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SERVICES ════════════════════════════════ -->
+<section class="sec sec-gr" id="services">
+  <div data-r>
+    <p class="eyebrow">I Nostri Servizi</p>
+    <h2 class="h-serif" style="max-width:500px;">
+      Soluzioni complete per<br>ogni <em>esigenza uditiva</em>
+    </h2>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card" data-r data-d="1">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="sc-n">01</div>
+      <div class="sc-ti">Apparecchi Acustici Endoauricolari</div>
+      <div class="sc-tx">Protesi ENDO digitali miniaturizzate, esteticamente invisibili, con componentistica di ultima generazione. Marcatura CE0051 certificata.</div>
+    </div>
+    <div class="svc-card" data-r data-d="2">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg></div>
+      <div class="sc-n">02</div>
+      <div class="sc-ti">Amplificatori Acustici</div>
+      <div class="sc-tx">Amplificatori di ultima generazione per chi necessita di supporto uditivo personalizzato, con alta fedeltà sonora e massimo comfort.</div>
+    </div>
+    <div class="svc-card" data-r data-d="3">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div class="sc-n">03</div>
+      <div class="sc-ti">Test Audiometrico Gratuito</div>
+      <div class="sc-tx">Esame dell'udito professionale offerto gratuitamente. Effettuato da audioprotesisti abilitati, a domicilio o presso i nostri centri convenzionati.</div>
+    </div>
+    <div class="svc-card" data-r data-d="1">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="sc-n">04</div>
+      <div class="sc-ti">Assistenza Domiciliare</div>
+      <div class="sc-tx">Servizio di assistenza audioprotesica gratuita a domicilio. Il nostro team raggiunge il paziente ovunque si trovi in Italia.</div>
+    </div>
+    <div class="svc-card" data-r data-d="2">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+      <div class="sc-n">05</div>
+      <div class="sc-ti">Pratiche ASL Incluse</div>
+      <div class="sc-tx">Gestiamo ogni aspetto burocratico con l'ASL di riferimento. La pratica per l'erogazione della protesi è completamente inclusa nel servizio.</div>
+    </div>
+    <div class="svc-card" data-r data-d="3">
+      <div class="sc-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <div class="sc-n">06</div>
+      <div class="sc-ti">Protesi di Servizio 48h</div>
+      <div class="sc-tx">In caso di problemi tecnici con il dispositivo, forniamo una protesi sostitutiva entro 48 ore, garantendo continuità uditiva senza interruzioni.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY MAXOTO STRIP ════════════════════════ -->
+<div class="why-strip">
+  <div class="why-l">
+    <p class="eyebrow" style="color:var(--au)">Perché M.A.X.Oto</p>
+    <h2 class="h-serif h-lt" style="margin-bottom:1.25rem;">
+      Il prezzo giusto,<br><em>senza compromessi.</em>
+    </h2>
+    <p class="body-tx body-dk" style="max-width:420px;margin-bottom:2rem;">
+      La protesi acustica media sul mercato costa <strong style="color:#fff;">€ 3.000</strong> — o <strong style="color:#fff;">€ 6.000</strong> per applicazioni binaurali. M.A.X.Oto ha scelto di vendere direttamente al consumatore al prezzo sociale di <strong style="color:var(--au-lt);">€ 950</strong>, senza rinunciare alla qualità digitale certificata.
+    </p>
+    <div class="rule-au"></div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;">
+      <div style="display:flex;align-items:center;gap:.7rem;font-size:.74rem;color:var(--g08);font-weight:300;">
+        <span style="width:12px;height:1px;background:var(--au);flex-shrink:0;display:block;"></span>
+        Nessun grande investimento pubblicitario
+      </div>
+      <div style="display:flex;align-items:center;gap:.7rem;font-size:.74rem;color:var(--g08);font-weight:300;">
+        <span style="width:12px;height:1px;background:var(--au);flex-shrink:0;display:block;"></span>
+        Nessun negozio con costi di gestione
+      </div>
+      <div style="display:flex;align-items:center;gap:.7rem;font-size:.74rem;color:var(--g08);font-weight:300;">
+        <span style="width:12px;height:1px;background:var(--au);flex-shrink:0;display:block;"></span>
+        Acquisto direttamente dall'azienda costruttrice
+      </div>
+    </div>
+  </div>
+  <div class="why-r">
+    <div class="metric" data-r>
+      <div class="metric-top">
+        <span class="metric-val">9.000.000</span>
+        <span class="metric-lbl">Italiani con Ipoacusia</span>
+      </div>
+      <div class="metric-bar"><div class="metric-fill" data-w="30%"></div></div>
+    </div>
+    <div class="metric" data-r data-d="1">
+      <div class="metric-top">
+        <span class="metric-val">€ 950</span>
+        <span class="metric-lbl">vs € 3.000 del mercato</span>
+      </div>
+      <div class="metric-bar"><div class="metric-fill" data-w="32%"></div></div>
+    </div>
+    <div class="metric" data-r data-d="2">
+      <div class="metric-top">
+        <span class="metric-val">48h</span>
+        <span class="metric-lbl">Protesi sostitutiva garantita</span>
+      </div>
+      <div class="metric-bar"><div class="metric-fill" data-w="100%"></div></div>
+    </div>
+    <div class="metric" data-r data-d="3">
+      <div class="metric-top">
+        <span class="metric-val">2 anni</span>
+        <span class="metric-lbl">Garanzia completa inclusa</span>
+      </div>
+      <div class="metric-bar"><div class="metric-fill" data-w="100%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRODUCTS ════════════════════════════════ -->
+<section class="sec sec-dk" id="products">
+  <div data-r>
+    <p class="eyebrow" style="color:var(--au)">I Nostri Prodotti</p>
+    <h2 class="h-serif h-lt">
+      Protesi digitali<br><em>invisibili e accessibili.</em>
+    </h2>
+  </div>
+  <div class="prod-grid">
+    <!-- ENDO -->
+    <div class="prod-card" data-r="l">
+      <div class="prod-tag">Endoauricolare · Massima Discrezione</div>
+      <div class="prod-name">ENDO</div>
+      <div class="prod-badges">
+        <span class="prod-badge">Digitale 100%</span>
+        <span class="prod-badge">Invisibile</span>
+        <span class="prod-badge">CE 0051</span>
+        <span class="prod-badge">Intracanale</span>
+      </div>
+      <div class="prod-tl">Estetico. Invisibile. Potente.</div>
+      <div class="prod-feats">
+        <div class="prod-feat">Componentistica digitale miniaturizzata di ultima generazione</div>
+        <div class="prod-feat">Circuito digitale FONDATION per ipoacusie gravi</div>
+        <div class="prod-feat">Sistemi di compressione del rumore avanzati</div>
+        <div class="prod-feat">Design perfetto, semplicità d'uso assoluta</div>
+        <div class="prod-feat">Alta qualità sonora in ogni situazione di ascolto</div>
+      </div>
+      <div class="prod-price-row">
+        <div class="prod-price">€ 950</div>
+        <div class="prod-price-note">+ 4% IVA<br>Garanzia 2 anni inclusa</div>
+      </div>
+      <a class="prod-link" href="#contacts">
+        Richiedi Informazioni
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <div class="prod-ghost">ENDO</div>
+    </div>
+
+    <!-- CIC -->
+    <div class="prod-card" data-r="r">
+      <div class="prod-tag">CIC · Completamente in Canale</div>
+      <div class="prod-name">CIC</div>
+      <div class="prod-badges">
+        <span class="prod-badge">CIC Standard</span>
+        <span class="prod-badge">Digima</span>
+        <span class="prod-badge">CE 0051</span>
+        <span class="prod-badge">Comfort Max</span>
+      </div>
+      <div class="prod-tl">Discreta. Digitale. Efficace.</div>
+      <div class="prod-feats">
+        <div class="prod-feat">Modello completamente inserito nel canale uditivo</div>
+        <div class="prod-feat">Disponibile in versione Standard e Digima</div>
+        <div class="prod-feat">Adatto a perdite uditive da lieve a grave</div>
+        <div class="prod-feat">Elaborazione digitale del suono a più canali</div>
+        <div class="prod-feat">Calibrazione personalizzata dal costruttore</div>
+      </div>
+      <div class="prod-price-row">
+        <div class="prod-price">€ 950</div>
+        <div class="prod-price-note">+ 4% IVA<br>Pratica ASL inclusa</div>
+      </div>
+      <a class="prod-link" href="#contacts">
+        Richiedi Informazioni
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <div class="prod-ghost">CIC</div>
+    </div>
+
+    <!-- Retro Micro One -->
+    <div class="prod-card" data-r="l">
+      <div class="prod-tag">Retroauricolare · Soluzione Avanzata</div>
+      <div class="prod-name">Retro Micro One</div>
+      <div class="prod-badges">
+        <span class="prod-badge">Retroauricolare</span>
+        <span class="prod-badge">Micro</span>
+        <span class="prod-badge">CE 0051</span>
+        <span class="prod-badge">Ipoacusie gravi</span>
+      </div>
+      <div class="prod-tl">Potente. Preciso. Affidabile.</div>
+      <div class="prod-feats">
+        <div class="prod-feat">Ideale per ipoacusie moderate-gravi e profonde</div>
+        <div class="prod-feat">Forma retroauricolare con ricevitore microfonico</div>
+        <div class="prod-feat">Regolazione professionale personalizzata</div>
+        <div class="prod-feat">Massima amplificazione in formato compatto</div>
+        <div class="prod-feat">Compatibile con servizi ASL convenzionati</div>
+      </div>
+      <div class="prod-price-row">
+        <div class="prod-price">€ 950</div>
+        <div class="prod-price-note">+ 4% IVA<br>Assistenza domiciliare inclusa</div>
+      </div>
+      <a class="prod-link" href="#contacts">
+        Richiedi Informazioni
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <div class="prod-ghost">Retro</div>
+    </div>
+
+    <!-- Amplificatori -->
+    <div class="prod-card" data-r="r">
+      <div class="prod-tag">Amplificatore Acustico · Accessibilità</div>
+      <div class="prod-name">Amplificatori Acustici</div>
+      <div class="prod-badges">
+        <span class="prod-badge">Alta Fedeltà</span>
+        <span class="prod-badge">Personalizzato</span>
+        <span class="prod-badge">Comfort</span>
+      </div>
+      <div class="prod-tl">Chiaro. Diretto. Accessibile.</div>
+      <div class="prod-feats">
+        <div class="prod-feat">Amplificazione sonora ad alta fedeltà audiologica</div>
+        <div class="prod-feat">Ideale per chi necessita di supporto senza protesi</div>
+        <div class="prod-feat">Regolazione personalizzata del livello di amplificazione</div>
+        <div class="prod-feat">Soluzione economica e immediata all'udito ridotto</div>
+        <div class="prod-feat">Disponibile con assistenza audioprotesica dedicata</div>
+      </div>
+      <div class="prod-price-row">
+        <div class="prod-price" style="font-size:1rem;color:var(--g07);">Su richiesta</div>
+        <div class="prod-price-note">Valutazione personalizzata<br>con test uditivo gratuito</div>
+      </div>
+      <a class="prod-link" href="#contacts">
+        Richiedi Informazioni
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <div class="prod-ghost">Amp</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INCLUDED PACKAGE ════════════════════════ -->
+<section class="sec sec-md" id="package">
+  <div data-r>
+    <p class="eyebrow">Tutto Incluso a € 950</p>
+    <h2 class="h-serif">
+      Un pacchetto completo,<br><em>nessun costo nascosto.</em>
+    </h2>
+  </div>
+  <div class="pkg-grid">
+    <div class="pkg-card" data-r data-d="1">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg></div>
+      <div class="pkg-title">Test Uditivo GRATUITO</div>
+      <div class="pkg-text">Audiometria professionale completamente gratuita, effettuata da personale specializzato prima di qualsiasi acquisto.</div>
+    </div>
+    <div class="pkg-card" data-r data-d="2">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="pkg-title">Garanzia 2 Anni</div>
+      <div class="pkg-text">Garanzia completa di due anni su ogni dispositivo. Riparazioni e sostituzioni senza costi aggiuntivi.</div>
+    </div>
+    <div class="pkg-card" data-r data-d="3">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="pkg-title">Assistenza Domiciliare</div>
+      <div class="pkg-text">Il nostro audioprotesista viene direttamente da te, ovunque in Italia, per la consegna, regolazione e assistenza.</div>
+    </div>
+    <div class="pkg-card" data-r data-d="1">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+      <div class="pkg-title">Pratica ASL Inclusa</div>
+      <div class="pkg-text">Gestiamo per te l'intera procedura burocratica con l'ASL. Nessuna perdita di tempo, tutto compreso nel prezzo.</div>
+    </div>
+    <div class="pkg-card" data-r data-d="2">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="pkg-title">Protesi Sostitutiva 48h</div>
+      <div class="pkg-text">In caso di guasto, entro 48 ore ti consegniamo una protesi sostitutiva di servizio, senza interruzioni all'ascolto.</div>
+    </div>
+    <div class="pkg-card" data-r data-d="3">
+      <div class="pkg-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+      <div class="pkg-title">Supporto Continuativo</div>
+      <div class="pkg-text">Assistenza telefonica e in loco disponibile per tutta la durata della garanzia e oltre, con personale esperto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AFFILIATES ══════════════════════════════ -->
+<div class="aff-strip" id="affiliates">
+  <div data-r="l">
+    <p class="eyebrow" style="color:var(--au)">Diventa Partner</p>
+    <h2 class="h-serif h-lt" style="margin-bottom:1.2rem;">
+      Convenziona il tuo<br><em>Centro. È GRATIS.</em>
+    </h2>
+    <p class="body-tx body-dk" style="max-width:420px;margin-bottom:2rem;">
+      Farmacisti, ottici e centri medici possono affiliarsi gratuitamente a M.A.X.Oto e offrire ai loro clienti protesi acustiche al prezzo sociale. Tu guadagni, i tuoi clienti risparmiano.
+    </p>
+    <a href="#contacts" class="btn btn-au">
+      Affiliati Subito
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+    <div class="aff-badge-row">
+      <span class="aff-badge">Affiliazione GRATUITA</span>
+      <span class="aff-badge">Formazione inclusa</span>
+      <span class="aff-badge">Supporto marketing</span>
+    </div>
+  </div>
+  <div class="aff-list" data-r="r">
+    <div class="aff-item">
+      <div class="aff-item-ico"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+      <div>
+        <div class="aff-item-title">Farmacie</div>
+        <div class="aff-item-text">Amplia i servizi alla clientela con protesi acustiche certificate, senza costi di affiliazione.</div>
+      </div>
+    </div>
+    <div class="aff-item">
+      <div class="aff-item-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+      <div>
+        <div class="aff-item-title">Ottici</div>
+        <div class="aff-item-text">Integra il servizio audiologico nella tua ottica con tutto il supporto tecnico M.A.X.Oto.</div>
+      </div>
+    </div>
+    <div class="aff-item">
+      <div class="aff-item-ico"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <div>
+        <div class="aff-item-title">Centri Medici</div>
+        <div class="aff-item-text">Aggiungi la protesi acustica ai servizi del tuo centro. Guadagni tu, risparmiano i tuoi pazienti.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TESTIMONIALS ════════════════════════════ -->
+<section class="sec sec-gr">
+  <div data-r>
+    <p class="eyebrow">Testimonianze</p>
+    <h2 class="h-serif">I nostri pazienti <em>parlano chiaro</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card" data-r data-d="1">
+      <div class="testi-stars">
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <blockquote class="testi-q">Ho risparmiato oltre € 2.000 rispetto ad altri centri. La protesi ENDO è completamente invisibile — nessuno se ne accorge. L'assistenza domiciliare è stata impeccabile.</blockquote>
+      <div class="testi-auth">
+        <div class="testi-av">GT</div>
+        <div><div class="testi-name">Giovanni T.</div><div class="testi-role">Paziente M.A.X.Oto — Napoli</div></div>
+      </div>
+    </div>
+    <div class="testi-card" data-r data-d="2">
+      <div class="testi-stars">
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <blockquote class="testi-q">La pratica ASL l'hanno gestita loro completamente. Ho ricevuto la protesi a casa, già regolata. Qualità digitale sorprendente a un prezzo onesto. Lo consiglio a tutti.</blockquote>
+      <div class="testi-auth">
+        <div class="testi-av">MR</div>
+        <div><div class="testi-name">Maria R.</div><div class="testi-role">Paziente M.A.X.Oto — Roma</div></div>
+      </div>
+    </div>
+    <div class="testi-card" data-r data-d="3">
+      <div class="testi-stars">
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <blockquote class="testi-q">Il CIC di M.A.X.Oto ha risolto il mio problema uditivo che trascinavo da anni. Temevo non me lo potessi permettere — a € 950 tutto incluso, non ci sono più scuse.</blockquote>
+      <div class="testi-auth">
+        <div class="testi-av">AL</div>
+        <div><div class="testi-name">Antonio L.</div><div class="testi-role">Paziente M.A.X.Oto — Milano</div></div>
+      </div>
+    </div>
+    <div class="testi-card" data-r data-d="4">
+      <div class="testi-stars">
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg class="testi-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <blockquote class="testi-q">Come farmacista affiliata ho potuto offrire ai miei clienti una soluzione che prima non potevo permettermi. L'affiliazione gratuita ha aperto un nuovo servizio senza rischi.</blockquote>
+      <div class="testi-auth">
+        <div class="testi-av">SF</div>
+        <div><div class="testi-name">Sara F.</div><div class="testi-role">Farmacista Partner — Caserta</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA BANNER ══════════════════════════════ -->
+<section class="sec sec-dk">
+  <div class="cta-wrap" data-r>
+    <div class="cta-txt">
+      <p class="eyebrow" style="color:var(--au)">Inizia Adesso</p>
+      <h2 class="h-serif h-lt">
+        Ritrova il piacere<br>di <em>ascoltare bene.</em>
+      </h2>
+      <div class="rule-au"></div>
+      <p class="body-tx body-dk" style="max-width:420px;">
+        Il test dell'udito è gratuito, senza impegno. I nostri audioprotesisti ti guideranno dalla valutazione alla soluzione più adatta, direttamente a casa tua.
+      </p>
+    </div>
+    <div class="cta-acts">
+      <a href="tel:0812878408" class="btn btn-au">
+        Chiama: 081 287408
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a href="#contacts" class="btn btn-lt">Scrivi un Messaggio</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT INFO STRIP ═════════════════════ -->
+<div class="contacts-strip" id="contacts">
+  <div class="contact-item">
+    <div class="contact-ico"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+    <div>
+      <div class="contact-lbl">Sede Legale</div>
+      <div class="contact-val">Viale Antonio Gramsci 17/B<br>80122 Napoli (NA)</div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <div class="contact-ico"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+    <div>
+      <div class="contact-lbl">Telefono</div>
+      <div class="contact-val">
+        <a href="tel:0812878408">081 287408</a><br>
+        <span style="font-size:.68rem;color:var(--g07);">Sede Operativa: Via Ripuaria 50,<br>Varcaturo — Giugliano in Campania</span>
+      </div>
+    </div>
+  </div>
+  <div class="contact-item">
+    <div class="contact-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+    <div>
+      <div class="contact-lbl">Email &amp; Web</div>
+      <div class="contact-val">
+        <a href="mailto:info@maxoto.it">info@maxoto.it</a><br>
+        <a href="https://www.maxoto.it" target="_blank" style="font-size:.72rem;color:var(--g07);">www.maxoto.it</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══════════════════════════════════ -->
+<footer>
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand-name">M.A.X.Oto Otocostruzioni</div>
+      <p class="ft-brand-desc">
+        Produciamo e vendiamo protesi acustiche digitali microtimpaniche direttamente al consumatore, al prezzo sociale di € 950. Qualità certificata CE, senza intermediari.
+      </p>
+      <div class="ft-cert-row">
+        <span class="ft-cert">CE 0051</span>
+        <span class="ft-cert">IMQ Certified</span>
+        <span class="ft-cert">Digitale 100%</span>
+      </div>
+      <div class="ft-social">
+        <a href="https://www.facebook.com/maxo.srl/" target="_blank" class="ft-soc" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" class="ft-soc" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <p class="ft-col-title">Prodotti</p>
+      <nav class="ft-links">
+        <a href="#products">Apparecchi Acustici ENDO</a>
+        <a href="#products">Protesi CIC</a>
+        <a href="#products">CIC Digima Standard</a>
+        <a href="#products">Retro Micro One</a>
+        <a href="#products">Amplificatori Acustici</a>
+      </nav>
+    </div>
+
+    <div>
+      <p class="ft-col-title">Informazioni</p>
+      <nav class="ft-links">
+        <a href="#">Cos'è l'Ipoacusia?</a>
+        <a href="#">Tipi di Ipoacusia</a>
+        <a href="#">Prima di Acquistare</a>
+        <a href="#affiliates">Affiliati Subito</a>
+        <a href="#contacts">Contatti</a>
+      </nav>
+    </div>
+
+    <div>
+      <p class="ft-col-title">Contatti</p>
+      <p class="ft-contact-row">Viale Antonio Gramsci 17/B<br>80122 Napoli (NA), Italia</p>
+      <p class="ft-contact-row">Sede op.: Via Ripuaria 50<br>Varcaturo — Giugliano in Campania</p>
+      <p class="ft-contact-row"><a href="tel:0812878408">081 287408</a></p>
+      <p class="ft-contact-row"><a href="mailto:info@maxoto.it">info@maxoto.it</a></p>
+    </div>
+  </div>
+
+  <div class="divider-dk" style="margin-bottom:1.6rem;"></div>
+
+  <div class="ft-bottom">
+    <span class="ft-copy">© 2026 M.A.X.Oto Otocostruzioni. Tutti i diritti riservati. Certificato 1682/MDD · CE0051</span>
+    <nav class="ft-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Note Legali</a>
+      <a href="#">Regolamento UE 2016/679</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* ── PRELOADER ─────────────────────────────── */
+const pctEl = document.getElementById('prePct');
+let pct = 0;
+const ticker = setInterval(() => {
+  pct = Math.min(100, pct + Math.random() * 8 + 3);
+  if (pctEl) pctEl.textContent = Math.floor(pct) + '%';
+  if (pct >= 100) { clearInterval(ticker); setTimeout(hidePre, 400); }
+}, 65);
+
+function hidePre() {
+  const el = document.getElementById('pre');
+  el.classList.add('out');
+  setTimeout(() => { el.style.display = 'none'; initReveal(); }, 720);
+}
+
+/* ── NAV SCROLL ────────────────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 30);
+}, { passive: true });
+
+/* ── MOBILE MENU ───────────────────────────── */
+function toggleMob() {
+  const ham  = document.getElementById('navHam');
+  const menu = document.getElementById('mobNav');
+  const open = menu.classList.toggle('open');
+  ham.classList.toggle('open', open);
+  ham.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+/* ── ORBIT DOTS — precise CSS-based rotation ─
+   Each dot sits at center (top:50%, left:50%, margin:-3.5px).
+   We animate using CSS @keyframes that rotate the transform
+   origin and push the dot outward by exact px to sit ON the ring border.
+   The orb-wrap size is computed once and fed to a dynamic <style> tag.
+*/
+function initOrbits() {
+  const wrap = document.getElementById('orbWrap');
+  if (!wrap) return;
+  const size = wrap.offsetWidth;   // e.g. 260
+  const half = size / 2;           // 130
+
+  // Ring insets: ring-1 = 0%, ring-2 = 14%, ring-3 = 28%
+  // Radius to dot center = half - inset - 0.5px (border) - 3.5px (dot radius)
+  const r1 = half - 0   - 4;        // outer ring
+  const r2 = half * 0.86 - 4;       // mid ring   (inset 14% of full → 7% of half)
+  const r3 = half * 0.72 - 4;       // inner ring (inset 28% of full → 14% of half)
+
+  // Inject dynamic keyframes with exact px radii
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes od1 {
+      from { transform: rotate(0deg)   translateX(${r1}px) rotate(0deg);   }
+      to   { transform: rotate(360deg) translateX(${r1}px) rotate(-360deg); }
+    }
+    @keyframes od2 {
+      from { transform: rotate(130deg)   translateX(${r2}px) rotate(-130deg);   }
+      to   { transform: rotate(490deg)   translateX(${r2}px) rotate(-490deg);   }
+    }
+    @keyframes od3 {
+      from { transform: rotate(250deg)   translateX(${r3}px) rotate(-250deg);   }
+      to   { transform: rotate(610deg)   translateX(${r3}px) rotate(-610deg);   }
+    }
+    #od1 { animation: od1  7s linear infinite; }
+    #od2 { animation: od2 11s linear infinite reverse; }
+    #od3 { animation: od3  5s linear infinite; }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ── SCROLL REVEAL ─────────────────────────── */
+let revObs;
+function initReveal() {
+  initOrbits();   // run after layout is stable
+
+  revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('on');
+        // Animate metric bars
+        e.target.querySelectorAll('.metric-fill[data-w]').forEach(b => {
+          b.style.width = b.dataset.w;
+        });
+        revObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+
+  document.querySelectorAll('[data-r], .metric').forEach(el => revObs.observe(el));
+}
+
+// Fallback: run after preloader timeout
+setTimeout(() => {
+  if (document.getElementById('pre').style.display === 'none') return;
+  initReveal();
+}, 3500);
+</script>
+</body>
+</html>
